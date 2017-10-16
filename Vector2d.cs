@@ -2,11 +2,13 @@
 // Assembly: UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 // Assembly location: C:\Program Files (x86)\Unity\Editor\Data\Managed\UnityEngine.dll
 using System;
-using System.Runtime.CompilerServices;
 
 namespace UnityEngine {
     public struct Vector2d {
-        public const double kEpsilon = 1E-05d;
+		const double EPSILON_MAGNITUDE = 9.99999974737875E-06;		// ~= 1e-5
+		const double EPSILON_MAGNITUDE_SQR = EPSILON_MAGNITUDE*EPSILON_MAGNITUDE;
+
+		public const double kEpsilon = 1E-05d;		// Unused? Should be merged with EPSILON_MAGNITUDE?
         public double x;
         public double y;
 
@@ -117,11 +119,12 @@ namespace UnityEngine {
         }
 
         public static bool operator ==(Vector2d lhs, Vector2d rhs) {
-            return Vector2d.SqrMagnitude(lhs - rhs) < 0.0 / 1.0;
+			// Implementation similar to Vector3
+            return Vector2d.SqrMagnitude(lhs - rhs) < EPSILON_MAGNITUDE_SQR;
         }
 
         public static bool operator !=(Vector2d lhs, Vector2d rhs) {
-            return (double)Vector2d.SqrMagnitude(lhs - rhs) >= 0.0 / 1.0;
+            return !(lhs==rhs);
         }
 
         public void Set(double new_x, double new_y) {
@@ -154,7 +157,7 @@ namespace UnityEngine {
 
         public void Normalize() {
             double magnitude = this.magnitude;
-            if (magnitude > 9.99999974737875E-06)
+            if (magnitude > EPSILON_MAGNITUDE)
                 this = this / magnitude;
             else
                 this = Vector2d.zero;
