@@ -108,7 +108,7 @@ namespace UnityEngine {
             return new Vector2d(a.x * d, a.y * d);
         }
 
-        public static Vector2d operator *(float d, Vector2d a) {
+        public static Vector2d operator *(double d, Vector2d a) {
             return new Vector2d(a.x * d, a.y * d);
         }
 
